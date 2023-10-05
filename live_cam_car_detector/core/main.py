@@ -6,11 +6,14 @@ cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
 
+# object classes
+from .constants import classNamesSelection
+classCodes = classNamesSelection.keys()
+classNames = classNamesSelection.values()
+
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
-
-# object classes
-from .constants import classNames
+model.predict(classes=classCodes)
 
 while True:
     success, img = cap.read()
@@ -32,7 +35,7 @@ while True:
             confidence = math.ceil((box.conf[0]*100))/100
             print("Confidence --->",confidence)
 
-            # class name
+            # class name            
             cls = int(box.cls[0])
             print("Class name -->", classNames[cls])
 
@@ -43,7 +46,9 @@ while True:
             color = (255, 0, 0)
             thickness = 2
 
-            cv2.putText(img, classNames[cls], org, font, fontScale, color, thickness)
+            #cv2.putText(img, classNames[cls], org, font, fontScale, color, thickness)
+            custom_label = f"{classNames[cls]}:{confidence}"
+            cv2.putText(img, custom_label, org, font, fontScale, color, thickness)
 
     cv2.imshow('Webcam', img)
     if cv2.waitKey(1) == ord('q'):
