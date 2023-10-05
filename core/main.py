@@ -43,7 +43,9 @@ while True:
             color = (255, 0, 0)
             thickness = 2
 
-            cv2.putText(img, classNames[cls], org, font, fontScale, color, thickness)
+            #cv2.putText(img, classNames[cls], org, font, fontScale, color, thickness)
+            custom_label = f"{classNames[cls]}:{confidence}"
+            cv2.putText(img, custom_label, org, font, fontScale, color, thickness)
 
     cv2.imshow('Webcam', img)
     if cv2.waitKey(1) == ord('q'):

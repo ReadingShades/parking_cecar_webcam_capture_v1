@@ -1,4 +1,10 @@
 classNames = [
+    "car",
+    "bus",
+    "truck",
+]
+
+fullClassNames = [
     "person",
     "bicycle",
     "car",
