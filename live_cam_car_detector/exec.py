@@ -1,5 +1,5 @@
 def main():
-    from live_cam_car_detector import main
+    from core import main
 
     pass
 
