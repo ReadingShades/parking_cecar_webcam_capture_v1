@@ -8,8 +8,8 @@ cap.set(4, 480)
 
 # object classes
 from .constants import classNamesSelection
-classCodes = classNamesSelection.keys()
-classNames = classNamesSelection.values()
+classCodes = [classNamesSelection.keys()]
+classNames = [classNamesSelection.values()]
 
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
