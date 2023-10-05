@@ -13,11 +13,10 @@ classNames = classNamesSelection.values()
 
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
-model.predict(classes=classCodes)
 
 while True:
     success, img = cap.read()
-    results = model(img, stream=True)
+    results = model.predict(img, stream=True, classes=classCodes)
 
     # coordinates
     for r in results:
