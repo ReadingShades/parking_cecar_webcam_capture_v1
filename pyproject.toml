@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "parking-cecar-webcam-capture-v1"
+version = "0.1.0"
+description = "Demo on how to capture car detection objects, save as Image and redirect to the license detection app"
+authors = ["ReadingShades <42413498+ReadingShades@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ultralytics = "^8.0.193"
+opencv-python = "^4.8.1.78"
+setuptools = "^68.2.2"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
