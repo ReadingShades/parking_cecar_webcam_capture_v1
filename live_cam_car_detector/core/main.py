@@ -9,24 +9,6 @@ from ultralytics import YOLO
 
 from .utils import *
 
-future = None
-future_result = None
-
-# Configure logging
-logging.basicConfig(
-    filename="http_requests.log", level=logging.INFO, format="%(asctime)s - %(message)s"
-)
-
-
-def make_post_request(url, headers, data):
-    try:
-        response = requests.post(url=url, headers=headers, data=data)
-        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
-        return response.text
-    except Exception as e:
-        logging.error(f"Error making POST request to {url}: {e}")
-        return None
-
 
 with concurrent.futures.ThreadPoolExecutor() as executor:
     # start webcam
@@ -93,19 +75,18 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
                     )
 
                     # make async query and logg it
-                    if confidence >= 0.67:
+                    if confidence >= 0.6:
                         data = package_data(crop_cv2_image(img, [x1, y1, x2, y2]))
                         future = executor.submit(make_post_request, url, headers, data)
                         logging.info(data)
 
-                    if future is not None:
                         future_result = future.result()
-                    if future_result:
-                        logging.info(f"POST request response: {future_result}")
-                        future = None
+                        if future_result:
+                            logging.info(f"POST request response: {future_result}")
+                            future = None
 
         cv2.imshow("Webcam", img)
-        time.sleep(3)
+        time.sleep(0.01)
         if cv2.waitKey(1) == ord("q"):
             break
 
