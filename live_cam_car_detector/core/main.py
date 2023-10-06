@@ -9,19 +9,8 @@ from ultralytics import YOLO
 
 from .utils import *
 
-# cycle clock in seconds
-cycle_pause_duration = 3
-cycle_clock_start = 0
-cycle_clock_current = 0
-# post_func_pause clock in seconds
-post_func_pause_duration = 5
-post_func_clock_start = 0
-post_func_clock_current = 0
-# switch that controls wether to reset or not start timer
-post_func_sw = 0
-
-# Concurrent adjustment
 future = None
+future_result = None
 
 # Configure logging
 logging.basicConfig(
@@ -60,7 +49,6 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 
     # from here
     while True:
-        post_func_clock_current = time.time()        
         success, img = cam.read()
         results = model.predict(img, stream=True)
 
@@ -108,22 +96,16 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
                     if confidence >= 0.67:
                         data = package_data(crop_cv2_image(img, [x1, y1, x2, y2]))
                         future = executor.submit(make_post_request, url, headers, data)
-                        if (post_func_clock_current - post_func_clock_start < post_func_pause_duration):
-                            post_func_sw = 1
-                        if post_func_sw == 1:
-                            post_func_sw = 0
-                            post_func_clock_current = 0
-                            post_func_clock_start = time.time()
+                        logging.info(data)
 
                     if future is not None:
-                        result = future.result()
-                        if result:
-                            logging.info(f"POST request response: {result}")
+                        future_result = future.result()
+                    if future_result:
+                        logging.info(f"POST request response: {future_result}")
+                        future = None
 
         cv2.imshow("Webcam", img)
-        time.sleep(1)
-        print(f"post_func_start = {post_func_clock_start}")
-        print(f"post_func_current = {post_func_clock_current}")
+        time.sleep(3)
         if cv2.waitKey(1) == ord("q"):
             break
 
