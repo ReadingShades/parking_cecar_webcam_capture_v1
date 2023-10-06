@@ -1,6 +1,7 @@
 from ultralytics import YOLO
 import cv2
 import math
+import time
 
 # start webcam
 print(cv2.__version__)
@@ -60,6 +61,7 @@ while True:
                 cv2.putText(img, custom_label, org, font, fontScale, color, thickness)
 
     cv2.imshow("Webcam", img)
+    time.sleep(1)
     if cv2.waitKey(1) == ord("q"):
         break
 
