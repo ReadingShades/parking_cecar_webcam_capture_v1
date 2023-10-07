@@ -1,8 +1,10 @@
 import json
+import logging
 import os
 from datetime import datetime
 
 import cv2
+import requests
 
 from .constants import TMP_DIR
 
@@ -28,8 +30,7 @@ def make_post_request(url, headers, data):
 
 def generate_timestamp_now():
     now = datetime.now()
-    dt_string = now.strftime("%Y_%m_%d__%H_%M_%S")
-    return dt_string
+    return now.strftime("%Y_%m_%d__%H_%M_%S")
 
 
 def crop_cv2_image(original_image, box, folder_path=TMP_DIR):
@@ -47,5 +48,4 @@ def crop_cv2_image(original_image, box, folder_path=TMP_DIR):
 
 
 def package_data(file_path: str):
-    data = json.dumps({"src_file": f"{file_path}"})
-    return data
+    return json.dumps({"src_file": f"{file_path}"})

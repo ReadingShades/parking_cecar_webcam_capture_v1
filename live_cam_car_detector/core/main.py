@@ -4,7 +4,6 @@ import math
 import time
 
 import cv2
-import requests
 from ultralytics import YOLO
 
 from .utils import *
@@ -18,7 +17,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
     cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-    cam.set(cv2.CAP_PROP_FPS, 30)
+    cam.set(cv2.CAP_PROP_FPS, 60)
 
     # object classes
     from .constants import classNamesSelection, data, fullClassNamesCodes, headers, url
@@ -80,8 +79,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
                         future = executor.submit(make_post_request, url, headers, data)
                         logging.info(data)
 
-                        future_result = future.result()
-                        if future_result:
+                        if future_result := future.result():
                             logging.info(f"POST request response: {future_result}")
                             future = None
 
