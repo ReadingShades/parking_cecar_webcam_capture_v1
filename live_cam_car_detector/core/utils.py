@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import date, datetime
 
 import cv2
 import requests
@@ -12,9 +12,10 @@ isExist = os.path.exists(TMP_DIR)
 if not isExist:
     os.makedirs(TMP_DIR)
 
+today = date.today()
 # Configure logging
 logging.basicConfig(
-    filename="http_requests.log", level=logging.INFO, format="%(asctime)s - %(message)s"
+    filename=f"{today}_http_requests.log", level=logging.INFO, format="%(asctime)s - %(message)s"
 )
 
 
