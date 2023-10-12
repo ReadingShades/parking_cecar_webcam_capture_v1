@@ -139,7 +139,7 @@ GitHub.sublime-settings
 #Project specific
 #img folders
 backend/detection_imgs/*
-live_cam_car_detector/temp/*
+*/live_cam_car_detector/tmp/*
 #redis temp database
 *.rdb
 #schema
