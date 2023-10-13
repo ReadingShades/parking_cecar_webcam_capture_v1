@@ -11,9 +11,3 @@ def task_rungr():
         "actions": [CmdAction(f"{POETRY_ENV_RUN} {PYTHON_SCRIPT_CMD} exec_gradio")],
         'verbosity': 2,
     }
-
-def task_rungrint():
-    return {
-        "actions": [CmdAction(f"{POETRY_ENV_RUN} {PYTHON_SCRIPT_CMD} exec_gradio_int")],
-        'verbosity': 2,
-    }
