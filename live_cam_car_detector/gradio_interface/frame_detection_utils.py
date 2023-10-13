@@ -87,8 +87,8 @@ async def query_detection(id_ref):
     return make_get_request(f"{query_url}{id_ref}/", headers)
 
 
-async def detect_license(frame):
-    img, detection = detect_cars(frame)
+async def detect_license(frame, save_img_flag):
+    img, detection = detect_cars(frame, save_img_flag)
     breakpoint()
     if detection is not None:
         try:
