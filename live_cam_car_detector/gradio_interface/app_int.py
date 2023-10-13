@@ -12,9 +12,11 @@ with gr.Blocks() as demo:
     gr.Markdown("Prototipo de app de reconocimiento de placas")
     with gr.Row():
         video_feed = gr.Image(
-            shape=(640, 480), source="webcam", mirror_webcam=False, streaming=True
+            shape=(640, 480), type="numpy", source="webcam", mirror_webcam=False, streaming=True
         )
         live_vehicle_detection_cam = set_gr_w648_h480_ninteractive()
+        #dump_output = gr.Text(interactive=False, visible=False)
+        dump_output = gr.Text(interactive=False)
     btn_detect = gr.Button("Detect")
     with gr.Row():
         with gr.Column():
@@ -29,7 +31,7 @@ with gr.Blocks() as demo:
     video_feed.stream(
         fn=detect_cars, 
         inputs=video_feed, 
-        outputs=[live_vehicle_detection_cam, _]
+        outputs=[live_vehicle_detection_cam, dump_output]
     )
     btn_detect.click(
         fn=detect_license,

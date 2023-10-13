@@ -6,7 +6,7 @@ from datetime import date, datetime
 import cv2
 import requests
 
-from .constants import TMP_DIR
+from .constants import TMP_DIR, LOGS_FOLDER
 
 isExist = os.path.exists(TMP_DIR)
 if not isExist:
@@ -15,8 +15,8 @@ if not isExist:
 today = date.today()
 # Configure logging
 logging.basicConfig(
-    filename=f"{today}_http_requests.log",
-    level=logging.INFO,
+    filename=os.path.join(LOGS_FOLDER, f"{today}_debug.log"),
+    level=logging.DEBUG,
     format="%(asctime)s - %(message)s",
 )
 

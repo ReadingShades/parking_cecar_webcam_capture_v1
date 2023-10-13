@@ -52,10 +52,10 @@ def detect_cars(frame, process_license_flag=False):
 
                 # confidence
                 confidence = math.ceil((box.conf[0] * 100)) / 100
-                print("Confidence --->", confidence)
+                logging.info("Confidence --->", confidence)
 
                 # class name
-                print("Class name -->", classNames[cls])
+                logging.info("Class name -->", classNames[cls])
 
                 # object details
                 org = [x1, y1]
@@ -76,7 +76,7 @@ def detect_cars(frame, process_license_flag=False):
 
 
 async def post_detection(detection):
-    data = package_data(crop_cv2_image(detection))
+    data = package_data(detection)
     return make_post_request(post_url, headers, data)
 
 
