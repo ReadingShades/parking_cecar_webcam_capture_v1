@@ -1,3 +1,4 @@
+import pdb
 import asyncio
 import logging
 import math
@@ -52,10 +53,12 @@ def detect_cars(frame, process_license_flag=False):
 
                 # confidence
                 confidence = math.ceil((box.conf[0] * 100)) / 100
-                logging.info("Confidence --->", confidence)
+                confidence_log = f"Confidence ---> {confidence}"
+                logging.info(confidence_log)
 
                 # class name
-                logging.info("Class name -->", classNames[cls])
+                class_log = f"Class name --> {classNames[cls]}"
+                logging.info(class_log)
 
                 # object details
                 org = [x1, y1]
@@ -68,7 +71,7 @@ def detect_cars(frame, process_license_flag=False):
                 custom_label = f"{classNames[cls]}:{confidence}"
                 cv2.putText(frame, custom_label, org, font, fontScale, color, thickness)
 
-                if confidence >= 0.7:
+                if confidence >= 0.5 and process_license_flag:
                     detection = crop_cv2_image(frame, [x1, y1, x2, y2])
                     return frame, detection
 
@@ -86,10 +89,20 @@ async def query_detection(id_ref):
 
 async def detect_license(frame):
     img, detection = detect_cars(frame)
-    query_data = await post_detection(detection=detection)
-    license_detection_data = await query_detection(query_data.get("id_ref"))
-    return (
-        license_detection_data.get("pred_loc"),
-        license_detection_data.get("crop_loc"),
-        license_detection_data.get("ocr_text_result"),
-    )
+    breakpoint()
+    if detection is not None:
+        try:
+            query_data = await post_detection(detection=detection)
+        except Exception as e:
+            logging.error(exc_info=e)
+        breakpoint()
+        try:
+            license_detection_data = await query_detection(query_data.get("id_ref"))
+        except Exception as e:
+            logging.error(exc_info=e)
+        breakpoint()
+        return (
+            license_detection_data.get("pred_loc"),
+            license_detection_data.get("crop_loc"),
+            license_detection_data.get("ocr_text_result"),
+        )

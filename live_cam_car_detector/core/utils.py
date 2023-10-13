@@ -1,3 +1,4 @@
+import pdb
 import json
 import logging
 import os
@@ -24,9 +25,11 @@ logging.basicConfig(
 def make_post_request(url, headers, data):
     try:
         response = requests.post(url=url, headers=headers, data=data)
+        breakpoint()
         response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
 
-        logging.debug(response)
+        breakpoint()
+        logging.debug(response.text)
 
         return response.text
     except Exception as e:
@@ -37,9 +40,11 @@ def make_post_request(url, headers, data):
 def make_get_request(url, headers):
     try:
         response = requests.get(url=url, headers=headers)
+        breakpoint()
         response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
 
-        logging.debug(response)
+        breakpoint()
+        logging.debug(response.text)
 
         return response.text
     except Exception as e:
