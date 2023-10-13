@@ -3,13 +3,12 @@ import gradio as gr
 from .frame_detection_utils import *
 
 
-def set_gr_w648_h480_ninteractive():
-    return gr.Image(shape=(640, 480), interactive=False)
-
+css = """
+"""
 
 # Create a Gradio interface
-with gr.Blocks() as demo:
-    gr.Markdown("Prototipo de app de reconocimiento de placas")
+with gr.Blocks(css=css) as demo:
+    gr.Markdown("# Prototipo de app de reconocimiento de placas")
     with gr.Row():
         video_feed = gr.Image(
             shape=(640, 480),
@@ -19,20 +18,22 @@ with gr.Blocks() as demo:
             streaming=True,
         )
         toggle_save_img = gr.State(True)
-        live_vehicle_detection_cam = set_gr_w648_h480_ninteractive()
+        live_vehicle_detection_cam = gr.Image(shape=(640, 480), interactive=False)
         # dump_output = gr.Text(interactive=False, visible=False)
         dump_output = gr.Text(interactive=False)
     btn_detect = gr.Button("Detect")
     with gr.Row():
         with gr.Column():
-            gr.Markdown("license_detection")
-            license_detection_img = set_gr_w648_h480_ninteractive()
+            gr.Markdown("### license_detection")
+            license_detection_img = gr.Image(shape=(640, 480), interactive=False)
         with gr.Column():
-            gr.Markdown("license_crop")
-            license_detection_crop = set_gr_w648_h480_ninteractive()
-            ocr_output = gr.TextArea(interactive=False)
-        detection_reference = gr.Text(interactive=False)
-    btn_query = gr.Button("Search_detection")
+            gr.Markdown("### license_crop")
+            license_detection_crop = gr.Image(shape=(640, 480), interactive=False, show_label=False)
+            ocr_output = gr.TextArea(lines=4, max_lines=10, interactive=False)
+        with gr.Column():
+            gr.Markdown("#### reference id:")
+            detection_reference = gr.Text(lines=1, max_lines=1)
+            btn_query = gr.Button("Search_detection")
 
     # EventListeners
     video_feed.stream(

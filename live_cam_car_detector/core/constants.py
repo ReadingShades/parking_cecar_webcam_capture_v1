@@ -8,7 +8,7 @@ LOGS_FOLDER = os.path.join(BASE_DIR, "logs")
 
 post_url = "http://127.0.0.1:8000/api/v1/detections/"
 
-query_url = "http://127.0.0.1:8000/api/v1/detections/id_ref/"
+query_url = "http://127.0.0.1:8000/api/v1/detections/ref/"
 
 headers = {"Content-Type": "application/json"}
 

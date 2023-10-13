@@ -23,7 +23,8 @@ tf = max(lw - 1, 1)  # Font thickness.
 
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
-    results = model.predict(frame, stream=True)
+    #results = model.predict(frame, stream=True)
+    results = model.predict(frame, stream=True, verbose=False)
 
     # coordinates
     for r in results:
@@ -84,17 +85,18 @@ async def query_detection_by_reference(id_ref):
     try:
         license_detection_data = await query_detection(id_ref=id_ref)
     except Exception as e:
-        logging.error(exc_info=e)
-    breakpoint()
-    return (
+        logging.error(e, exc_info=True)
+    #breakpoint()
+    if license_detection_data is not None:
+        return (
         license_detection_data.get("pred_loc"),
         license_detection_data.get("crop_loc"),
         license_detection_data.get("ocr_text_result"),
-    )
+        )
 
 async def detect_license(frame, save_img_flag):    
     img, detection = detect_cars(frame, save_img_flag)
-    breakpoint()
+    #breakpoint()
     
     if detection is not None:
         try:

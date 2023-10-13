@@ -17,7 +17,7 @@ today = date.today()
 logging.basicConfig(
     filename=os.path.join(LOGS_FOLDER, f"{today}_debug.log"),
     level=logging.DEBUG,
-    format="%(asctime)s - %(message)s",
+    format="%(asctime)-s.%(msecs)03d %(levelname)-6.6s %(filename)-18.18s line:%(lineno)-4.4d %(funcName)-18s %(message)s",
 )
 
 
