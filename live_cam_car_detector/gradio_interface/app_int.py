@@ -1,10 +1,7 @@
 import gradio as gr
 import cv2
 
-def process_frame_with_opencv(frame):
-    # Your OpenCV processing code here
-    # Example: Convert to grayscale
-    return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+from .frame_detection_utils import *
 
 # Create a Gradio interface
 with gr.Blocks() as demo:
@@ -13,9 +10,6 @@ with gr.Blocks() as demo:
         inp = gr.Image(source="webcam", mirror_webcam=False, streaming=True)
         out = gr.Image(interactive=False)
     btn = gr.Button("Run")
-    inp.stream(fn=process_frame_with_opencv, inputs=inp, outputs=out)
+    inp.stream(fn=detect_cars, inputs=inp, outputs=out)
 
 demo.queue().launch(debug=True, show_api=False)
-
-
-
