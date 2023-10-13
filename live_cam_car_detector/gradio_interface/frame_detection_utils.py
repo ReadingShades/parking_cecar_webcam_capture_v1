@@ -13,7 +13,7 @@ classNames = list(fullClassNamesCodes.values())
 model = YOLO("yolo-Weights/yolov8n.pt")
 
 # Define a function to process webcam frames and perform car detection
-def detect_cars(frame):
+def detect_cars(frame, process_license_flag = False):
     # Your car detection code here
     # This function should take a frame (image) as input and return the processed frame
     # Example:
