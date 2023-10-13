@@ -1,20 +1,29 @@
+import asyncio
 import logging
 import math
-import time
 
 import cv2
-from ultralytics import YOLO
-
-from core.utils import *
 
 # object classes and base detection api endpoint
-from core.constants import classNamesSelection, fullClassNamesCodes, headers, url
+from core.constants import (
+    classNamesSelection,
+    fullClassNamesCodes,
+    headers,
+    post_url,
+    query_url,
+)
+from core.utils import *
+from ultralytics import YOLO
 
 classCodes = list(fullClassNamesCodes.keys())
 classNames = list(fullClassNamesCodes.values())
 
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
+# linewidth and thickness
+
+lw = max(round(sum((640, 480)) / 2 * 0.003), 2)  # Line width.
+tf = max(lw - 1, 1)  # Font thickness.
 
 
 # Define a function to process webcam frames and perform car detection
@@ -53,23 +62,34 @@ def detect_cars(frame, process_license_flag=False):
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 fontScale = 1
                 color = (255, 0, 0)
-                thickness = 2
+                thickness = tf
 
                 # cv2.putText(frame, classNames[cls], org, font, fontScale, color, thickness)
                 custom_label = f"{classNames[cls]}:{confidence}"
                 cv2.putText(frame, custom_label, org, font, fontScale, color, thickness)
 
-                """ # make async query and logg it
-                if confidence >= 0.6:
-                    data = package_data(crop_cv2_image(frame, [x1, y1, x2, y2]))
-                    future = executor.submit(make_post_request, url, headers, data)
-                    logging.info(data)
+                if confidence >= 0.7:
+                    detection = crop_cv2_image(frame, [x1, y1, x2, y2])
+                    return frame, detection
 
-                    if future_result := future.result():
-                        logging.info(f"POST request response: {future_result}")
-                        future = None """
+    return frame, None
 
-    return frame
 
-def post_detection():
-    pass
+async def post_detection(detection):
+    data = package_data(crop_cv2_image(detection))
+    return make_post_request(post_url, headers, data)
+
+
+async def query_detection(id_ref):
+    return make_get_request(f"{query_url}{id_ref}/", headers)
+
+
+async def detect_license(frame):
+    img, detection = detect_cars(frame)
+    query_data = await post_detection(detection=detection)
+    license_detection_data = await query_detection(query_data.get("id_ref"))
+    return (
+        license_detection_data.get("pred_loc"),
+        license_detection_data.get("crop_loc"),
+        license_detection_data.get("ocr_text_result"),
+    )

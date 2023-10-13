@@ -15,7 +15,9 @@ if not isExist:
 today = date.today()
 # Configure logging
 logging.basicConfig(
-    filename=f"{today}_http_requests.log", level=logging.INFO, format="%(asctime)s - %(message)s"
+    filename=f"{today}_http_requests.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
 )
 
 
@@ -23,9 +25,25 @@ def make_post_request(url, headers, data):
     try:
         response = requests.post(url=url, headers=headers, data=data)
         response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+        logging.debug(response)
+
         return response.text
     except Exception as e:
         logging.error(f"Error making POST request to {url}: {e}")
+        return None
+
+
+def make_get_request(url, headers):
+    try:
+        response = requests.get(url=url, headers=headers)
+        response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
+
+        logging.debug(response)
+
+        return response.text
+    except Exception as e:
+        logging.error(f"Error making GET request to {url}: {e}")
         return None
 
 

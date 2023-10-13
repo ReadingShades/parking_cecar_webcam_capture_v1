@@ -6,7 +6,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TMP_DIR = os.path.join(BASE_DIR, "tmp")
 LOGS_FOLDER = os.path.join(BASE_DIR, "logs")
 
-url = "http://127.0.0.1:8000/api/v1/detections/"
+post_url = "http://127.0.0.1:8000/api/v1/detections/"
+
+query_url = "http://127.0.0.1:8000/api/v1/detections/id_ref/"
 
 headers = {"Content-Type": "application/json"}
 

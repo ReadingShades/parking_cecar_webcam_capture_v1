@@ -20,7 +20,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
     cam.set(cv2.CAP_PROP_FPS, 60)
 
     # object classes
-    from .constants import classNamesSelection, data, fullClassNamesCodes, headers, url
+    from .constants import classNamesSelection, data, fullClassNamesCodes, headers, post_url
 
     classCodes = list(fullClassNamesCodes.keys())
     classNames = list(fullClassNamesCodes.values())
@@ -76,7 +76,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
                     # make async query and logg it
                     if confidence >= 0.6:
                         data = package_data(crop_cv2_image(img, [x1, y1, x2, y2]))
-                        future = executor.submit(make_post_request, url, headers, data)
+                        future = executor.submit(make_post_request, post_url, headers, data)
                         logging.info(data)
 
                         if future_result := future.result():

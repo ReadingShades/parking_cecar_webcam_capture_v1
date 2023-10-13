@@ -1,6 +1,5 @@
 def main():
-    from gradio_interface import app_int
-    #from gradio_interface import app_int_v2
+    from gradio_interface import app_int    
 
     pass
 
