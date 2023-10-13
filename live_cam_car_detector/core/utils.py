@@ -1,4 +1,3 @@
-import pdb
 import json
 import logging
 import os
@@ -7,7 +6,7 @@ from datetime import date, datetime
 import cv2
 import requests
 
-from .constants import TMP_DIR, LOGS_FOLDER
+from .constants import LOGS_FOLDER, TMP_DIR
 
 isExist = os.path.exists(TMP_DIR)
 if not isExist:
@@ -25,13 +24,12 @@ logging.basicConfig(
 def make_post_request(url, headers, data):
     try:
         response = requests.post(url=url, headers=headers, data=data)
-        breakpoint()
+
         response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
 
-        breakpoint()
         logging.debug(response.text)
 
-        return response.text
+        return json.loads(response.text)
     except Exception as e:
         logging.error(f"Error making POST request to {url}: {e}")
         return None
@@ -40,13 +38,12 @@ def make_post_request(url, headers, data):
 def make_get_request(url, headers):
     try:
         response = requests.get(url=url, headers=headers)
-        breakpoint()
+
         response.raise_for_status()  # Raise an exception for 4xx and 5xx status codes
 
-        breakpoint()
         logging.debug(response.text)
 
-        return response.text
+        return json.loads(response.text)
     except Exception as e:
         logging.error(f"Error making GET request to {url}: {e}")
         return None

@@ -1,18 +1,13 @@
-import pdb
 import asyncio
+import concurrent.futures
 import logging
 import math
+import pdb
 
 import cv2
-
 # object classes and base detection api endpoint
-from core.constants import (
-    classNamesSelection,
-    fullClassNamesCodes,
-    headers,
-    post_url,
-    query_url,
-)
+from core.constants import (classNamesSelection, fullClassNamesCodes, headers,
+                            post_url, query_url)
 from core.utils import *
 from ultralytics import YOLO
 
@@ -87,22 +82,26 @@ async def query_detection(id_ref):
     return make_get_request(f"{query_url}{id_ref}/", headers)
 
 
-async def detect_license(frame, save_img_flag):
+async def detect_license(frame, save_img_flag):    
     img, detection = detect_cars(frame, save_img_flag)
     breakpoint()
-    if detection is not None:
-        try:
-            query_data = await post_detection(detection=detection)
-        except Exception as e:
-            logging.error(exc_info=e)
-        breakpoint()
-        try:
-            license_detection_data = await query_detection(query_data.get("id_ref"))
-        except Exception as e:
-            logging.error(exc_info=e)
-        breakpoint()
-        return (
-            license_detection_data.get("pred_loc"),
-            license_detection_data.get("crop_loc"),
-            license_detection_data.get("ocr_text_result"),
-        )
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        if detection is not None:
+            try:
+                future = executor.submit(post_detection, detection)
+                #query_data = await post_detection(detection=detection)
+            except Exception as e:
+                logging.error(exc_info=e)
+            breakpoint()
+            try:
+                if future_result := future.result():
+                    license_detection_data = await query_detection(future_result.get("id_ref"))                    
+                    #license_detection_data = await query_detection(query_data.get("id_ref"))
+            except Exception as e:
+                logging.error(exc_info=e)
+            breakpoint()
+            return (
+                license_detection_data.get("pred_loc"),
+                license_detection_data.get("crop_loc"),
+                license_detection_data.get("ocr_text_result"),
+            )
