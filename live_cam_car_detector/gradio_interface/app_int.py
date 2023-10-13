@@ -31,6 +31,8 @@ with gr.Blocks() as demo:
             gr.Markdown("license_crop")
             license_detection_crop = set_gr_w648_h480_ninteractive()
             ocr_output = gr.TextArea(interactive=False)
+        detection_reference = gr.Text(interactive=False)
+    btn_query = gr.Button("Search_detection")
 
     # EventListeners
     video_feed.stream(
@@ -41,6 +43,12 @@ with gr.Blocks() as demo:
     btn_detect.click(
         fn=detect_license,
         inputs=[video_feed, toggle_save_img],
+        outputs=detection_reference,
+        show_progress=True,
+    )
+    btn_query.click(
+        fn=query_detection_by_reference,
+        inputs=detection_reference,
         outputs=[license_detection_img, license_detection_crop, ocr_output],
         show_progress=True,
     )
