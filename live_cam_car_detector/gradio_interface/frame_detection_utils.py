@@ -66,7 +66,7 @@ def detect_cars(frame, process_license_flag=False):
                 custom_label = f"{classNames[cls]}:{confidence}"
                 cv2.putText(frame, custom_label, org, font, fontScale, color, thickness)
 
-                if confidence >= 0.5 and process_license_flag:
+                if (confidence >= 0.5 and process_license_flag) or process_license_flag:
                     detection = crop_cv2_image(frame, [x1, y1, x2, y2])
                     return frame, detection
 
