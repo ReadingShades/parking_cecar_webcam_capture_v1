@@ -27,8 +27,11 @@ def crop_cv2_image(original_image, box, folder_path=TMP_DIR):
 
     # Construct the output file path
     output_path = os.path.join(folder_path, f"{generate_timestamp_now()}_.png")
+    
+    # Ensure the image is in the BGR color space (it's the default for OpenCV)
+    img_bgr = cv2.cvtColor(cropped_region, cv2.COLOR_RGB2BGR)
 
-    # Save the cropped region as a PNG image
-    cv2.imwrite(output_path, cropped_region)
+    # Save the image as a PNG file while specifying the format
+    cv2.imwrite(output_path, img_bgr, [int(cv2.IMWRITE_PNG_COMPRESSION), 2])
 
     return output_path

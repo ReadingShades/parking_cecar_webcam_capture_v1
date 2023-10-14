@@ -10,6 +10,7 @@ from .utils import *
 
 classCodes = list(fullClassNamesCodes.keys())
 classNames = list(fullClassNamesCodes.values())
+selectionCodes = list(classNamesSelection.keys())
 
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
@@ -21,8 +22,8 @@ tf = max(lw - 1, 1)  # Font thickness.
 
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
-    # results = model.predict(frame, stream=True)
-    results = model.predict(frame, stream=True, verbose=False)
+    results = model.predict(frame, stream=True)    
+    #results = model.predict(frame, stream=True, verbose=False)
 
     # coordinates
     for r in results:
@@ -40,7 +41,7 @@ def detect_cars(frame, process_license_flag=False):
 
             # class code
             cls = int(box.cls[0])
-            if cls in classNamesSelection:
+            if cls in selectionCodes:
                 # put box in cam
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 255), 3)
 
@@ -63,7 +64,11 @@ def detect_cars(frame, process_license_flag=False):
                 custom_label = f"{classNames[cls]}:{confidence}"
                 cv2.putText(frame, custom_label, org, font, fontScale, color, thickness)
 
-                if process_license_flag and confidence >= 0.5:
+                if (
+                    process_license_flag
+                    and (cls in classCodes)
+                    and (confidence >= 0.5)
+                ):
                     detection = crop_cv2_image(frame, [x1, y1, x2, y2])
                     return frame, detection
 
