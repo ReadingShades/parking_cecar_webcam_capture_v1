@@ -140,6 +140,7 @@ GitHub.sublime-settings
 #img folders
 backend/detection_imgs/*
 */tmp/*
+*/yolo-Weights/*
 #redis temp database
 *.rdb
 #schema
