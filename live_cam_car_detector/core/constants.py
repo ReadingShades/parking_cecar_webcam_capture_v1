@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 
@@ -6,13 +5,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TMP_DIR = os.path.join(BASE_DIR, "tmp")
 LOGS_FOLDER = os.path.join(BASE_DIR, "logs")
 
-post_url = "http://127.0.0.1:8000/api/v1/detections/"
-
-query_url = "http://127.0.0.1:8000/api/v1/detections/ref/"
-
-headers = {"Content-Type": "application/json"}
-
-data = json.dumps({"src_file": "../test_img/test_08_IHT_214.jpg"})
+for folder in [TMP_DIR, LOGS_FOLDER]:
+    isExist = os.path.exists(folder)
+    if not isExist:
+        os.makedirs(folder)
 
 classNamesSelection = {
     2: "car",

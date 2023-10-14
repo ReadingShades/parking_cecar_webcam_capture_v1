@@ -1,5 +1,5 @@
 def main():
-    from gradio_interface import app
+    from core import app
 
     pass
 
