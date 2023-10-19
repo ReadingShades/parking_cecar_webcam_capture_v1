@@ -2,11 +2,11 @@ import asyncio
 
 from .detection_api import post_detection, query_detection
 from .utils import logging
-from .vehicle_video_stream_detector import detect_cars
+from .vehicle_video_stream_detector import detect_cars, rtsp_frame_generator
 
 
 async def detect_license(frame, save_img_flag):
-    img, detection = detect_cars(frame, save_img_flag)
+    frame, detection = detect_cars(frame, save_img_flag)
     # breakpoint()
 
     if detection is not None:
@@ -18,11 +18,11 @@ async def detect_license(frame, save_img_flag):
     return query_data.get("id_ref")
     #return "test"
 
-async def detect_license_save_wrapper(frame):
-    return await detect_license(frame, True)
+def detect_license_save_wrapper(frame):
+    return detect_cars(frame, True)
 
-async def detect_license_wrapper(frame):
-    return await detect_license(frame, False)
+def detect_license_nosave_wrapper(frame):
+    return detect_cars(frame, False)
 
 async def query_detection_by_reference(id_ref):
     try:
