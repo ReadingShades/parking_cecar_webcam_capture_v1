@@ -2,7 +2,7 @@ import asyncio
 
 from .detection_api import post_detection, query_detection
 from .utils import logging
-from .vehicle_video_stream_detector import detect_cars, rtsp_frame_generator
+from .vehicle_video_stream_detector import detect_cars, rtsp_frame_generator_v2, rtsp_url
 
 
 async def detect_license(frame, save_img_flag):
@@ -36,3 +36,7 @@ async def query_detection_by_reference(id_ref):
             license_detection_data.get("crop_loc"),
             license_detection_data.get("ocr_text_result"),
         )
+
+def rtsp_frame_generator_wrapper(placeholder: None):
+    global rtsp_url
+    return rtsp_frame_generator_v2(rtsp_url=rtsp_url)

@@ -18,7 +18,7 @@ with gr.Blocks(css=css) as demo:
             mirror_webcam=False,
             streaming=True,
             show_label=False,
-        )        
+        )
         live_vehicle_detection_cam = gr.Image(
             shape=(640, 480), interactive=False, show_label=False
         )

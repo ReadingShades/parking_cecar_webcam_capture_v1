@@ -22,7 +22,7 @@ tf = max(lw - 1, 1)  # Font thickness.
 
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
-    #results = model.predict(frame, stream=True)    
+    # results = model.predict(frame, stream=True)
     results = model.predict(frame, stream=True, verbose=False)
 
     # coordinates
@@ -64,25 +64,22 @@ def detect_cars(frame, process_license_flag=False):
                 custom_label = f"{classNames[cls]}:{confidence}"
                 cv2.putText(frame, custom_label, org, font, fontScale, color, thickness)
 
-                if (
-                    process_license_flag
-                    and (cls in classCodes)
-                    and (confidence >= 0.5)
-                ):
+                if process_license_flag and (cls in classCodes) and (confidence >= 0.5):
                     detection = crop_cv2_image(frame, [x1, y1, x2, y2])
                     return frame, detection
 
     return frame, None
 
+
 def rtsp_frame_generator(rtsp_url):
     width = 640
     height = 480
     cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
-    #print(cap.getBackendName())
+    # print(cap.getBackendName())
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     cap.set(cv2.CAP_PROP_FPS, 30)
-    #print(cap.get(cv2.CAP_PROP_FPS))
+    # print(cap.get(cv2.CAP_PROP_FPS))
 
     if not cap.isOpened():
         print("Error: Could not open video source.")
@@ -104,5 +101,24 @@ def rtsp_frame_generator(rtsp_url):
     finally:
         cap.release()
         print("Video capture released.")
+
+
+def rtsp_frame_generator_v2(rtsp_url):
+    frame_width = 640
+    frame_height = 480
+    cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
+    cap.set(cv2.CAP_PROP_FPS, 30)
+
+    while True:
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        yield frame
+
 
 rtsp_url = "rtsp://admin:123456@192.168.1.13:554/unicast/c0/s1/live"
