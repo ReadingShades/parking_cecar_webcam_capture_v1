@@ -22,8 +22,8 @@ tf = max(lw - 1, 1)  # Font thickness.
 
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
-    results = model.predict(frame, stream=True)    
-    #results = model.predict(frame, stream=True, verbose=False)
+    #results = model.predict(frame, stream=True)    
+    results = model.predict(frame, stream=True, verbose=False)
 
     # coordinates
     for r in results:
@@ -105,5 +105,4 @@ def rtsp_frame_generator(rtsp_url):
         cap.release()
         print("Video capture released.")
 
-# Replace 'rtsp://your_rtsp_url' with the actual RTSP URL of your camera.
-rtsp_url = 'rtsp://zephyr.rtsp.stream/pattern?streamKey=3ff519acb958c78851a49242c18ce46a'
+rtsp_url = "rtsp://admin:123456@192.168.1.13:554/unicast/c0/s1/live"

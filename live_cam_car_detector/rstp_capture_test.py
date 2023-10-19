@@ -4,9 +4,6 @@ import asyncio
 window_width = 640
 window_height = 480
 
-# Number of frames to pool before yielding
-pool_size = 10
-frame_pool = []
 
 def rtsp_frame_generator(rtsp_url):
     # cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
@@ -17,8 +14,8 @@ def rtsp_frame_generator(rtsp_url):
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, window_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, window_height)
     cap.set(cv2.CAP_PROP_FPS, 30)
-    cv2.namedWindow('UNV IP Camera', cv2.WINDOW_NORMAL)  # WINDOW_NORMAL allows resizing
-    cv2.resizeWindow('UNV IP Camera', window_width, window_height)
+    cv2.namedWindow("UNV IP Camera", cv2.WINDOW_NORMAL)  # WINDOW_NORMAL allows resizing
+    cv2.resizeWindow("UNV IP Camera", window_width, window_height)
     # print(cap.get(cv2.CAP_PROP_FPS))
 
     if not cap.isOpened():
@@ -33,12 +30,7 @@ def rtsp_frame_generator(rtsp_url):
                 print("Error: Could not read frame.")
                 break
 
-            global frame_pool
-            frame_pool.append(frame)
-
-            if len(frame_pool) >= pool_size:
-                yield frame_pool
-                frame_pool = []
+            yield frame
 
     except KeyboardInterrupt:
         # Handle keyboard interrupt gracefully
@@ -63,15 +55,14 @@ from core.gradio_detect_wrappers import (
 
 # To retrieve frames, you can use a loop like this:
 def detection_process():
-    for frames in frame_generator:    
-        for frame in frames:
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            """ frame_rgb, detection = detect_license_save_wrapper(frame_rgb)
-            print(detection)
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) """
-            frame_resized = cv2.resize(frame_rgb, (window_width, window_height))
-            frame_resized = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            cv2.imshow("UNV IP Camera", frame_resized)
+    for frame in frame_generator:
+        # frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame_rgb = frame
+        frame_rgb, detection = detect_license_nosave_wrapper(frame_rgb)
+        print(detection)
+
+        frame_resized = cv2.resize(frame_rgb, (window_width, window_height))
+        cv2.imshow("UNV IP Camera", frame_resized)
 
         # Press 'q' to exit the loop
         if cv2.waitKey(1) & 0xFF == ord("q"):
