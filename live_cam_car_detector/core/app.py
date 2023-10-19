@@ -18,8 +18,7 @@ with gr.Blocks(css=css) as demo:
             mirror_webcam=False,
             streaming=True,
             show_label=False,
-        )
-        toggle_save_img = gr.State(True)
+        )        
         live_vehicle_detection_cam = gr.Image(
             shape=(640, 480), interactive=False, show_label=False
         )
@@ -55,8 +54,8 @@ with gr.Blocks(css=css) as demo:
         outputs=[live_vehicle_detection_cam, dump_output],
     )
     btn_detect.click(
-        fn=detect_license,
-        inputs=[video_feed, toggle_save_img],
+        fn=detect_license_save_wrapper,
+        inputs=video_feed,
         outputs=detection_reference,
         show_progress=True,
     )
