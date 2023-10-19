@@ -9,15 +9,20 @@ async def detect_license(frame, save_img_flag):
     img, detection = detect_cars(frame, save_img_flag)
     # breakpoint()
 
-    """ if detection is not None:
+    if detection is not None:
         try:
             query_data = await post_detection(detection=detection)
         except Exception as e:
             logging.error(e, exc_info=True)
 
-    return query_data.get("id_ref") """
-    return "test"
+    return query_data.get("id_ref")
+    #return "test"
 
+async def detect_license_save_wrapper(frame):
+    return await detect_license(frame, True)
+
+async def detect_license_wrapper(frame):
+    return await detect_license(frame, False)
 
 async def query_detection_by_reference(id_ref):
     try:
