@@ -1,7 +1,14 @@
 import cv2
 
 def rtsp_frame_generator(rtsp_url):
-    cap = cv2.VideoCapture(rtsp_url)
+    width = 640
+    height = 480
+    cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
+    #print(cap.getBackendName())
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+    cap.set(cv2.CAP_PROP_FPS, 30)
+    #print(cap.get(cv2.CAP_PROP_FPS))
 
     if not cap.isOpened():
         print("Error: Could not open video source.")
