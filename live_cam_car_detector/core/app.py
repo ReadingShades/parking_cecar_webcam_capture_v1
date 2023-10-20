@@ -49,7 +49,7 @@ with gr.Blocks(css=css) as demo:
 
     # EventListeners
     video_feed.stream(
-        fn=detect_cars,
+        fn=detect_license_save_wrapper,
         inputs=video_feed,
         outputs=[live_vehicle_detection_cam, dump_output],
     )
