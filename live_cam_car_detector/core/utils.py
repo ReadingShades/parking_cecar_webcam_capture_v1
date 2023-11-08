@@ -33,6 +33,6 @@ def crop_cv2_image(original_image, box, folder_path=TMP_DIR):
     img_bgr = cropped_region
 
     # Save the image as a PNG file while specifying the format
-    cv2.imwrite(output_path, img_bgr, [int(cv2.IMWRITE_PNG_COMPRESSION), 2])
+    cv2.imwrite(output_path, img_bgr, [int(cv2.IMWRITE_PNG_COMPRESSION), 0])
 
     return output_path

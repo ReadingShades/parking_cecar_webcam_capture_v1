@@ -14,11 +14,6 @@ selectionCodes = list(classNamesSelection.keys())
 
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
-# linewidth and thickness
-
-lw = max(round(sum((640, 480)) / 2 * 0.003), 2)  # Line width.
-tf = max(lw - 1, 1)  # Font thickness.
-
 
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
@@ -55,6 +50,9 @@ def detect_cars(frame, process_license_flag=False):
                 logging.info(class_log)
 
                 # object details
+                # linewidth and thickness                
+                lw = max(round(sum((frame.shape)) / 2 * 0.003), 2)  # Line width.
+                tf = max(lw - 1, 1)  # Font thickness.
                 org = [x1, y1]
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 fontScale = 1
