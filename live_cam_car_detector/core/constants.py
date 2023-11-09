@@ -12,12 +12,14 @@ for folder in [TMP_DIR, LOGS_FOLDER]:
 
 classNamesSelection = {
     2: "car",
+    3: "motorbike",
     5: "bus",
     7: "truck",
 }
 
 classNames = [
     "car",
+    "motorbike",
     "bus",
     "truck",
 ]
