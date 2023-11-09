@@ -1,3 +1,13 @@
+"""The detection class names serves as a filter of valid
+detection objects to process.
+class_switch - str: Indicates whether the connected camera
+faces the "front" or the "back" of the vehicles in 
+the control point. Front facing camera is incapable of 
+detecting the license plate of motorbikes as such it ignores
+them.
+"""
+class_switch = "back"
+
 import os
 from pathlib import Path
 
@@ -10,19 +20,33 @@ for folder in [TMP_DIR, LOGS_FOLDER]:
     if not isExist:
         os.makedirs(folder)
 
-classNamesSelection = {
-    2: "car",
-    3: "motorbike",
-    5: "bus",
-    7: "truck",
-}
+if class_switch == "back":
+    classNamesSelection = {
+        2: "car",
+        3: "motorbike",
+        5: "bus",
+        7: "truck",
+    }
 
-classNames = [
-    "car",
-    "motorbike",
-    "bus",
-    "truck",
-]
+    classNames = [
+        "car",
+        "motorbike",
+        "bus",
+        "truck",
+    ]
+
+elif class_switch == "front":
+    classNamesSelection = {
+        2: "car",
+        5: "bus",
+        7: "truck",
+    }
+
+    classNames = [
+        "car",
+        "bus",
+        "truck",
+    ]
 
 fullClassNames = [
     "person",
