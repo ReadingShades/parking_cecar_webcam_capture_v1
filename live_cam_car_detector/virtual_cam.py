@@ -9,7 +9,7 @@ rtsp_url = "rtsp://admin:123456@192.168.1.13:554/unicast/c0/s1/live"
 cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
 
 # Create a virtual camera
-with pyvirtualcam.Camera(width=640, height=480, fps=30) as cam:
+with pyvirtualcam.Camera(width=2592, height=1520, fps=20) as cam:
 
     try:
         while True:

@@ -15,6 +15,7 @@ selectionCodes = list(classNamesSelection.keys())
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
 
+
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
     # results = model.predict(frame, stream=True)
@@ -50,7 +51,7 @@ def detect_cars(frame, process_license_flag=False):
                 logging.info(class_log)
 
                 # object details
-                # linewidth and thickness                
+                # linewidth and thickness
                 lw = max(round(sum((frame.shape)) / 2 * 0.003), 2)  # Line width.
                 tf = max(lw - 1, 1)  # Font thickness.
                 org = [x1, y1]
@@ -70,13 +71,16 @@ def detect_cars(frame, process_license_flag=False):
 
 
 def rtsp_frame_generator(rtsp_url):
-    width = 640
-    height = 480
+    width = 1920
+    height = 1080
+
+    """ width = 640
+    height = 480 """
     cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
     # print(cap.getBackendName())
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-    cap.set(cv2.CAP_PROP_FPS, 30)
+    cap.set(cv2.CAP_PROP_FPS, 20)
     # print(cap.get(cv2.CAP_PROP_FPS))
 
     if not cap.isOpened():
@@ -99,24 +103,6 @@ def rtsp_frame_generator(rtsp_url):
     finally:
         cap.release()
         print("Video capture released.")
-
-
-def rtsp_frame_generator_v2(rtsp_url):
-    frame_width = 640
-    frame_height = 480
-    cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
-
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
-    cap.set(cv2.CAP_PROP_FPS, 30)
-
-    while True:
-        ret, frame = cap.read()
-
-        if not ret:
-            break
-
-        yield frame
 
 
 rtsp_url = "rtsp://admin:123456@192.168.1.13:554/unicast/c0/s1/live"

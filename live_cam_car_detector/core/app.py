@@ -11,21 +11,30 @@ with gr.Blocks(css=css) as demo:
     # Top section of the application
     gr.Markdown("# Prototipo de app de reconocimiento de placas")
     with gr.Row():
-        video_feed = gr.Image(
-            shape=(640, 480),
-            type="numpy",
-            source="webcam",
-            mirror_webcam=False,
-            streaming=True,
-            show_label=False,
-        )
-        live_vehicle_detection_cam = gr.Image(
-            shape=(640, 480), interactive=False, show_label=False
-        )
-        with gr.Column():
-            # dump_output = gr.Text(interactive=False, visible=False)
-            dump_output = gr.Text(interactive=False, label="image_file_location")
+        with gr.Row():
+            video_feed = gr.Image(
+                shape=(640, 480),
+                type="numpy",
+                source="webcam",
+                mirror_webcam=False,
+                streaming=True,
+                show_label=False,
+            )
+            live_vehicle_detection_cam = gr.Image(
+                shape=(640, 480), interactive=False, show_label=False
+            )
+            with gr.Column():
+                # dump_output = gr.Text(interactive=False, visible=False)
+                dump_output = gr.Text(interactive=False, label="image_file_location")
             btn_detect = gr.Button("Detect")
+        switch_save_frame = gr.Slider(
+            minimum=0,
+            maximum=1,
+            step=1,
+            value=0,
+            label="Save frame?",
+            info="Switches the capture frame mode between No(0) and YES(1)",
+        )
 
     # Bottom section of the application
     with gr.Row():
@@ -49,8 +58,8 @@ with gr.Blocks(css=css) as demo:
 
     # EventListeners
     video_feed.stream(
-        fn=detect_license_save_wrapper,
-        inputs=video_feed,
+        fn=detect_license_switch_wrapper,
+        inputs=[video_feed, switch_save_frame],
         outputs=[live_vehicle_detection_cam, dump_output],
     )
     btn_detect.click(
