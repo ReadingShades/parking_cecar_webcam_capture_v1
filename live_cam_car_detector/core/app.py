@@ -11,6 +11,14 @@ with gr.Blocks(css=css) as demo:
     # Top section of the application
     gr.Markdown("# Prototipo de app de reconocimiento de placas")
     with gr.Row():
+        switch_save_frame = gr.Radio(
+            [("No", 0), ("Yes", 1)],
+            value=0,
+            label="Save frame?",
+            info="Switches the capture frame mode between NO and YES",
+        )
+        dump_output = gr.State(value=0)
+    with gr.Row():
         with gr.Column():
             video_feed = gr.Image(
                 shape=(720, 600),
@@ -28,14 +36,6 @@ with gr.Blocks(css=css) as demo:
                 show_label=True,
                 label="Live vehicle detection",
             )
-    with gr.Row():
-        switch_save_frame = gr.Radio(
-            [("No", 0), ("Yes", 1)],
-            value=0,
-            label="Save frame?",
-            info="Switches the capture frame mode between NO and YES",
-        )
-        dump_output = gr.State(value=0)
 
     # EventListeners
     video_feed.stream(
