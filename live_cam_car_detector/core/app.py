@@ -11,17 +11,23 @@ with gr.Blocks(css=css) as demo:
     # Top section of the application
     gr.Markdown("# Prototipo de app de reconocimiento de placas")
     with gr.Row():
-        video_feed = gr.Image(
-            shape=(720, 600),
-            type="numpy",
-            source="webcam",
-            mirror_webcam=False,
-            streaming=True,
-            show_label=False,
-        )
-        live_vehicle_detection_cam = gr.Image(
-            shape=(720, 600), interactive=False, show_label=False
-        )
+        with gr.Column():
+            video_feed = gr.Image(
+                shape=(720, 600),
+                type="numpy",
+                source="webcam",
+                mirror_webcam=False,
+                streaming=True,
+                show_label=True,
+                label="Live feed",
+            )
+        with gr.Column():
+            live_vehicle_detection_cam = gr.Image(
+                shape=(720, 600),
+                interactive=False,
+                show_label=True,
+                label="Live vehicle detection",
+            )
     with gr.Row():
         switch_save_frame = gr.Radio(
             [("No", 0), ("Yes", 1)],

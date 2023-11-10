@@ -2,6 +2,8 @@ import cv2
 import pyvirtualcam
 import logging
 
+print("Starting pyvirtualcam RTSP script...")
+
 # RTSP URL for your video feed
 rtsp_url = "rtsp://admin:123456@192.168.1.13:554/unicast/c0/s1/live"
 
@@ -10,7 +12,6 @@ cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
 
 # Create a virtual camera
 with pyvirtualcam.Camera(width=2592, height=1520, fps=20) as cam:
-
     try:
         while True:
             ret, frame = cap.read()
@@ -24,13 +25,14 @@ with pyvirtualcam.Camera(width=2592, height=1520, fps=20) as cam:
             cam.send(frame_rgb)
 
             # Show the frame (optional)
-            cv2.imshow('RTSP to Virtual Webcam', frame)
-        
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.imshow("RTSP to Virtual Webcam", frame)
+
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
 
     except Exception as e:
+        print("pyvirtualcam script crashed with errors...")
         logging.debug(e, exc_info=True)
 
-
+    print("Stopping pyvirtualcam...")
     cv2.destroyAllWindows()
