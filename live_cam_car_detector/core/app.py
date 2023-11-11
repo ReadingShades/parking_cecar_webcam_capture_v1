@@ -15,7 +15,13 @@ with gr.Blocks(css=css) as demo:
             [("No", 0), ("Yes", 1)],
             value=0,
             label="Save frame?",
-            info="Switches the capture frame mode between NO and YES",
+            info="Switches the capture frame save mode between NO and YES",
+        )
+        switch_detection_mode = gr.Radio(
+            [("Front", 0), ("Back", 1)],
+            value=0,
+            label="Detection mode",
+            info="Switches the detection mode config between excluding or including motorbikes",
         )
         dump_output = gr.State(value=0)
     with gr.Row():

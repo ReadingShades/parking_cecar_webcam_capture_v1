@@ -5,12 +5,47 @@ import cv2
 from ultralytics import YOLO
 
 # object classes and base detection api endpoint
-from .constants import classNamesSelection, fullClassNamesCodes
 from .utils import *
+from app import switch_detection_mode
 
-classCodes = list(fullClassNamesCodes.keys())
-classNames = list(fullClassNamesCodes.values())
-selectionCodes = list(classNamesSelection.keys())
+
+def load_class_config(flag: bool):
+    """The detection class names serves as a filter of valid
+    detection objects to process.
+    class_switch - str: Indicates whether the connected camera
+    faces the "front" or the "back" of the vehicles in
+    the control point. Front facing camera is incapable of
+    detecting the license plate of motorbikes as such it ignores
+    them."""
+    if flag:
+        classNamesSelection = {
+            2: "car",
+            5: "bus",
+            7: "truck",
+        }
+
+        classNames = [
+            "car",
+            "bus",
+            "truck",
+        ]
+    else:
+        classNamesSelection = {
+            2: "car",
+            3: "motorbike",
+            5: "bus",
+            7: "truck",
+        }
+
+        classNames = [
+            "car",
+            "motorbike",
+            "bus",
+            "truck",
+        ]
+
+    return classNamesSelection, classNames
+
 
 # model
 model = YOLO("yolo-Weights/yolov8n.pt")
@@ -18,6 +53,12 @@ model = YOLO("yolo-Weights/yolov8n.pt")
 
 # Define a function to process webcam frames and perform car detection
 def detect_cars(frame, process_license_flag=False):
+    classNamesSelection, fullClassNamesCodes = load_class_config(
+        bool(switch_detection_mode)
+    )
+    classCodes = list(fullClassNamesCodes.keys())
+    classNames = list(fullClassNamesCodes.values())
+    selectionCodes = list(classNamesSelection.keys())
     # results = model.predict(frame, stream=True)
     results = model.predict(frame, stream=True, verbose=False)
 
